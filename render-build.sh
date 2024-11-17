@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
-# Install PHP and composer dependencies
-curl -sS https://getcomposer.org/installer | php
-php composer.phar install --no-dev --optimize-autoloader
+# Update and install PHP and required extensions
+apt-get update && apt-get install -y php-cli php-mbstring php-xml unzip curl git
 
-# Install Node.js dependencies and build assets
+# Install Composer
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
+# Run Laravel commands
+composer install --no-dev --optimize-autoloader
 npm install
 npm run build
 
-# Cache Laravel configuration
+# Laravel optimizations
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
