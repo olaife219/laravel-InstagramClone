@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
+// use Intervention\Image\ImageManager;
+// use Intervention\Image\Drivers\Gd\Driver;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 
