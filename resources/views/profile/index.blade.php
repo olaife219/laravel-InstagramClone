@@ -34,7 +34,7 @@
             @foreach($user->posts as $post)
             <div class="pb-4">
                 <a href="/p/{{ $post->id }}">
-                <img src="/storage/{{ $post->image }}" alt="post" class="w-full h-auto">
+                <img src="{{ $post->image }}" alt="post" class="w-full h-auto">
                 </a>
             </div>
             @endforeach

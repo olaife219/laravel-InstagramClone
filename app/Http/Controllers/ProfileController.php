@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 
 class ProfileController extends Controller
 {
@@ -76,14 +78,34 @@ class ProfileController extends Controller
             'url' => $request->input('url'),
         ]);
 
-        if ($request->file('image')) {
-            $imagePath = $request->file('image')->store('profile', 'public');
+        // if ($request->file('image')) {
+        //     $imagePath = $request->file('image')->store('profile', 'public');
 
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read(public_path("storage/{$imagePath}"));
-            $image->resize(1000, 1000)->save();
-            $user->profile->update(['image' => $imagePath] ?? []);
+        //     $manager = new ImageManager(new Driver());
+        //     $image = $manager->read(public_path("storage/{$imagePath}"));
+        //     $image->resize(1000, 1000)->save();
+        //     $user->profile->update(['image' => $imagePath] ?? []);
+        // }
+
+        if ($request->hasFile('image')) {
+
+            $uploadedImageUrl = Cloudinary::upload(
+                $request->file('image')->getRealPath(),
+                [
+                    'folder' => 'profiles',
+                    'transformation' => [
+                        'width' => 1000,
+                        'height' => 1000,
+                        'crop' => 'fill'
+                    ]
+                ]
+            )->getSecurePath();
+
+            $user->profile->update([
+                'image' => $uploadedImageUrl,
+            ]);
         }
+
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;

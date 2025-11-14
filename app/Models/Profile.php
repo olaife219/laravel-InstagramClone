@@ -10,8 +10,17 @@ class Profile extends Model
 
     public function profileImage()
     {
-        $imagePath = ($this->image) ? $this->image : '/profile/b40sSzsOJd1ogbwbSEQ1qbiwjh0tvtTGgTig25cj.png';
-        return '/storage/' . $imagePath;
+        if ($this->image) {
+            if (str_starts_with($this->image, 'http')) {
+                return $this->image;
+            }
+
+            return '/storage/' . $this->image;
+        }
+
+        return 'https://res.cloudinary.com/dyen2qt0p/image/upload/v1733917471/uploads/profile-picture/custom-name-1733917440432.png';
+        // $imagePath = ($this->image) ? $this->image : '/profile/b40sSzsOJd1ogbwbSEQ1qbiwjh0tvtTGgTig25cj.png';
+        // return '/storage/' . $imagePath;
     }
 
     public function followers()

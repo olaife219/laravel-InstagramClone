@@ -6,7 +6,7 @@
                 <!-- Centered Image Section -->
                 <div class="w-full flex justify-center">
                     <a href="/profile/{{ $post->user->id }}">
-                    <img src="/storage/{{ $post->image }}" alt="Post Image" class="w-full h-auto rounded-lg shadow-md mb-0 pb-0">
+                    <img src="{{ $post->image }}" alt="Post Image" class="w-full h-auto rounded-lg shadow-md mb-0 pb-0">
                     </a>
                 </div>
 

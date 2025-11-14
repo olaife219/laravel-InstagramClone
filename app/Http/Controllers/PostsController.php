@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PostsController extends Controller
 {
@@ -33,16 +34,28 @@ class PostsController extends Controller
             'image' => ['required', 'image'],
         ]);
 
-        $imagePath = request('image')->store('uploads', 'public');
+         $uploadedFileUrl = Cloudinary::upload(
+            request()->file('image')->getRealPath(),
+            [
+                'folder' => 'posts',
+                'transformation' => [
+                    'width' => 1200,
+                    'height' => 1200,
+                    'crop' => 'fill'
+                ]
+            ]
+        )->getSecurePath();
 
-        $manager = new ImageManager(new Driver());
-        $image = $manager->read(public_path("storage/{$imagePath}"));
-        $image->resize(1200, 1200);
-        $image->save();
+        // $imagePath = request('image')->store('uploads', 'public');
+
+        // $manager = new ImageManager(new Driver());
+        // $image = $manager->read(public_path("storage/{$imagePath}"));
+        // $image->resize(1200, 1200);
+        // $image->save();
 
         auth()->user()->posts()->create([
             'caption' => $data['caption'],
-            'image' => $imagePath,
+            'image' => $uploadedFileUrl,
         ]);
 
         return redirect('/profile/' . auth()->user()->id);
